@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "icon": "./icons/khojx.png",
+    "icon": "./icons/images-1.jpg",
     "url": "https://khojx.github.io/KhojX/",
     "title": "KhojX",
     "doc": "Khojx futuristic website and research platform."
@@ -9,7 +9,7 @@
 
   {
     "id": 2,
-    "icon": "./icons/app2.png",
+    "icon": "./icons/images-1.jpg",
     "url": "https://github.com/khojx",
     "title": "Khojx GitHub",
     "doc": "Explore Khojx repositories and experimental systems."
@@ -17,7 +17,7 @@
 
   {
     "id": 3,
-    "icon": "./icons/app3.png",
+    "icon": "./icons/images-1.jpg",
     "url": "https://khojx.github.io",
     "title": "Khojx Projects",
     "doc": "Discover futuristic projects, packages, and innovations."
