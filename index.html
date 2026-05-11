@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>KHOJX Packages</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:#090d16;
+      color:white;
+      min-height:100vh;
+    }
+
+    .status-bar{
+      height:28px;
+      background:#05070d;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+
+    .title-bar{
+      position:sticky;
+      top:0;
+      z-index:100;
+      padding:22px;
+      background:rgba(15,20,35,0.92);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+
+    .title{
+      font-size:2rem;
+      font-weight:bold;
+      letter-spacing:2px;
+      color:#7df9ff;
+      text-shadow:0 0 12px #7df9ff;
+    }
+
+    .subtitle{
+      margin-top:8px;
+      color:#b8c4e0;
+      line-height:1.6;
+      font-size:0.95rem;
+    }
+
+    .container{
+      padding:18px;
+      max-width:1000px;
+      margin:auto;
+    }
+
+    .package-list{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .package-card{
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(125,249,255,0.12);
+      border-radius:20px;
+      padding:16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      transition:0.25s;
+    }
+
+    .package-card:hover{
+      transform:translateY(-2px);
+      border-color:#7df9ff;
+      box-shadow:0 0 18px rgba(125,249,255,0.14);
+    }
+
+    .left{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      flex:1;
+    }
+
+    .app-icon{
+      width:72px;
+      height:72px;
+      border-radius:18px;
+      object-fit:cover;
+      background:#111;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .info{
+      flex:1;
+    }
+
+    .app-title{
+      font-size:1.1rem;
+      font-weight:bold;
+      margin-bottom:6px;
+    }
+
+    .app-doc{
+      color:#b8c4e0;
+      line-height:1.6;
+      font-size:0.93rem;
+    }
+
+    .open-btn{
+      background:#7df9ff;
+      color:black;
+      text-decoration:none;
+      padding:13px 18px;
+      border-radius:14px;
+      font-weight:bold;
+      transition:0.2s;
+      white-space:nowrap;
+    }
+
+    .open-btn:hover{
+      transform:scale(1.04);
+      box-shadow:0 0 18px #7df9ff;
+    }
+
+    .loading,
+    .error,
+    .empty{
+      text-align:center;
+      padding:40px 20px;
+      color:#b8c4e0;
+    }
+
+    footer{
+      text-align:center;
+      padding:30px;
+      color:#7b88aa;
+      font-size:0.9rem;
+    }
+
+    @media(max-width:700px){
+
+      .package-card{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .open-btn{
+        width:100%;
+        text-align:center;
+      }
+
+      .title{
+        font-size:1.7rem;
+      }
+
+      .app-icon{
+        width:64px;
+        height:64px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="status-bar"></div>
+
+  <div class="title-bar">
+    <div class="title">KHOJX</div>
+
+    <div class="subtitle">
+      Explore our packages, projects, experiments, and futuristic systems.
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div id="loading" class="loading">
+      Loading packages...
+    </div>
+
+    <div id="packageList" class="package-list"></div>
+
+    <div id="empty" class="empty" style="display:none;">
+      No packages available.
+    </div>
+
+    <div id="error" class="error" style="display:none;">
+      Failed to load packages.
+    </div>
+
+  </div>
+
+  <footer>
+    © 2026 KHOJX • Discover • Learn • Create
+  </footer>
+
+  <script>
+
+    const PACKAGE_JSON_URL = "./packges.json";
+
+    const packageList = document.getElementById("packageList");
+    const loading = document.getElementById("loading");
+    const error = document.getElementById("error");
+    const empty = document.getElementById("empty");
+
+    async function loadPackages() {
+
+      try {
+
+        const response = await fetch(PACKAGE_JSON_URL);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch JSON");
+        }
+
+        const data = await response.json();
+
+        loading.style.display = "none";
+
+        if (!Array.isArray(data) || data.length === 0) {
+          empty.style.display = "block";
+          return;
+        }
+
+        data.forEach(app => {
+
+          const card = document.createElement("div");
+          card.className = "package-card";
+
+          card.innerHTML = `
+            <div class="left">
+
+              <img
+                class="app-icon"
+                src="${app.icon}"
+                alt="${app.title}"
+                loading="lazy"
+              >
+
+              <div class="info">
+
+                <div class="app-title">
+                  ${app.title || "Untitled"}
+                </div>
+
+                <div class="app-doc">
+                  ${app.doc || ""}
+                </div>
+
+              </div>
+
+            </div>
+
+            <a
+              class="open-btn"
+              href="${app.url}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              OPEN URL
+            </a>
+          `;
+
+          packageList.appendChild(card);
+
+        });
+
+      } catch (e) {
+
+        console.error(e);
+
+        loading.style.display = "none";
+        error.style.display = "block";
+
+      }
+
+    }
+
+    loadPackages();
+
+  </script>
+
+</body>
+</html>
